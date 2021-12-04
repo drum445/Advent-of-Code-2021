@@ -1,14 +1,22 @@
 data = STDIN.map(&:chomp)
 
-starting = {"x" => 0, "y" => 0, "aim" => 0}
+pos = {"x" => 0, "y" => 0, "aim" => 0}
 
-dirs = {
-	"forward" => proc {|i| starting["x"] += i; starting["y"] += starting["aim"] * i},
-	"up" => proc {|i| starting["aim"] -= i},
-	"down" => proc {|i| starting["aim"] += i},
-}
+data.each do |line|
+	cmd = line.split(" ")
+	action = cmd[0]
+	x = cmd[1].to_i
 
-data.map { |d| cmd = d.split(" "); dirs[cmd[0]].call(cmd[1].to_i) }
+	case cmd[0]
+	when "forward"
+		pos["x"] += x
+		pos["y"] += pos["aim"] * x
+	when "up"
+		pos["aim"] -= x
+	when "down"
+		pos["aim"] += x
+	end
+end
 
-p starting
-p starting["x"] * starting["y"]
+p pos
+p pos["x"] * pos["y"]
